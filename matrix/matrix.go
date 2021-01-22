@@ -1,16 +1,17 @@
 package matrix
 
 import (
+	"NumberMethods/utils"
 	"github.com/shopspring/decimal"
 	"strconv"
 	"strings"
 )
 
 func NewMatrix(width int, height int, data [][]float64) *Matrix {
-	pkg := make([][]decimal.Decimal, width)
-	for i := 0; i < width; i++ {
-		pkg[i] = make([]decimal.Decimal, height)
-		for j := 0; j < height; j++ {
+	pkg := make([][]decimal.Decimal, height)
+	for i := 0; i < height; i++ {
+		pkg[i] = make([]decimal.Decimal, width)
+		for j := 0; j < width; j++ {
 			pkg[i][j] = decimal.NewFromFloat(data[i][j])
 		}
 	}
@@ -19,10 +20,10 @@ func NewMatrix(width int, height int, data [][]float64) *Matrix {
 }
 
 func defaultCache() Cache {
-	return Cache { nil }
+	return Cache{nil}
 }
 
-func (m *Matrix) process(processor ValueProcessor) *Matrix {
+func (m *Matrix) process(processor utils.ValueProcessor) *Matrix {
 	var newData [][]decimal.Decimal
 
 	for _, row := range m.data {

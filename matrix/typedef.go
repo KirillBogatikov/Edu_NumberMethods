@@ -13,10 +13,24 @@ type Matrix struct {
 	cache         Cache
 }
 
+func (m *Matrix) Get(row, column int) decimal.Decimal {
+	return m.data[row][column]
+}
+
+func (m *Matrix) Set(row, column int, value decimal.Decimal) decimal.Decimal {
+	tmp := m.data[row][column]
+	m.data[row][column] = value
+	return tmp
+}
+
+func (m *Matrix) Width() int {
+	return m.width
+}
+
+func (m *Matrix) Height() int {
+	return m.height
+}
+
 type Cache struct {
 	determinant *decimal.Decimal
 }
-
-type ValueProcessor func(i decimal.Decimal) decimal.Decimal
-
-type CellProcessor func(origin decimal.Decimal, victim decimal.Decimal) decimal.Decimal
