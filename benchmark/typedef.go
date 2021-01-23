@@ -37,6 +37,9 @@ func multiBenchmark(c chan Benchmark, count int64, operator func()) {
 		}
 	}
 
+	utils.ClearConsole()
+	fmt.Printf("Benchmark progress: 100%% (%d / %d)\n", count, count)
+
 	c <- Benchmark{time.Now().Sub(t).Milliseconds(), float64(total) / float64(count)}
 }
 
