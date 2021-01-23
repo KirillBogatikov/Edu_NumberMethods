@@ -7,6 +7,16 @@ import (
 	"strings"
 )
 
+var verboseOut = false
+
+func EnableVerbose() {
+	verboseOut = true
+}
+
+func DisableVerbose() {
+	verboseOut = false
+}
+
 func NewMatrix(width int, height int, data [][]float64) *Matrix {
 	pkg := make([][]decimal.Decimal, height)
 	for i := 0; i < height; i++ {

@@ -28,11 +28,16 @@ func (m *Matrix) MulMatrix(o *Matrix) *Matrix {
 			v := decimal.NewFromInt(0)
 
 			for i := 0; i < m.width; i++ {
-				s += fmt.Sprintf("%v * %v + ", m.data[r][i], o.data[i][c])
+				if verboseOut {
+					s += fmt.Sprintf("%v * %v + ", m.data[r][i], o.data[i][c])
+				}
+
 				v = v.Add(m.data[r][i].Mul(o.data[i][c]))
 			}
 
-			fmt.Printf("%s = %v\n", s, v)
+			if verboseOut {
+				fmt.Printf("%s = %v\n", s, v)
+			}
 			newRow = append(newRow, v)
 		}
 

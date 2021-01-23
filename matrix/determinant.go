@@ -27,14 +27,16 @@ func (m *Matrix) Determinant() decimal.Decimal {
 			utils.Mul(m.data[0][0], m.data[1][2], m.data[2][1])).Sub(
 			utils.Mul(m.data[0][1], m.data[1][0], m.data[2][2]))
 
-		fmt.Printf("Calc determinant with triangles rule: (%v * %v * %v) + (%v * %v * %v) + (%v * %v * %v) - (%v * %v * %v) - (%v * %v * %v) - (%v * %v * %v) = %v\n",
-			m.data[0][0], m.data[1][1], m.data[2][2], m.data[2][0], m.data[0][1], m.data[1][2], m.data[1][0], m.data[2][1], m.data[0][2],
-			m.data[0][2], m.data[1][1], m.data[2][0], m.data[0][0], m.data[1][2], m.data[2][1], m.data[0][1], m.data[1][0], m.data[2][2], determinant)
+		if verboseOut {
+			fmt.Printf("Calc determinant with triangles rule: (%v * %v * %v) + (%v * %v * %v) + (%v * %v * %v) - (%v * %v * %v) - (%v * %v * %v) - (%v * %v * %v) = %v\n",
+				m.data[0][0], m.data[1][1], m.data[2][2], m.data[2][0], m.data[0][1], m.data[1][2], m.data[1][0], m.data[2][1], m.data[0][2],
+				m.data[0][2], m.data[1][1], m.data[2][0], m.data[0][0], m.data[1][2], m.data[2][1], m.data[0][1], m.data[1][0], m.data[2][2], determinant)
+		}
 	} else {
 		var k decimal.Decimal
 
 		for i := 0; i < m.width; i++ {
-			if i % 2 == 0 {
+			if i%2 == 0 {
 				k = PositiveK
 			} else {
 				k = NegativeK
