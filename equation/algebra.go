@@ -1,4 +1,4 @@
-package gauss
+package equation
 
 import (
 	"NumberMethods/utils"

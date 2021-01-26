@@ -15,7 +15,7 @@ func (m *GaussProvider) Count() int64 {
 
 func (m *GaussProvider) Operator() func() {
 	return func() {
-		gauss.NewEquationSystem(matrix.NewMatrix(4, 3, [][]float64{
+		gauss.NewSystem(matrix.NewMatrix(4, 3, [][]float64{
 			{5.4, -2.3, 3.4, -3.5},
 			{4.2, 1.7, -2.3, 2.7},
 			{3.4, 2.4, 7.4, 1.9},

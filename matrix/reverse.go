@@ -6,6 +6,10 @@ import (
 
 func (m *Matrix) Reverse() *Matrix {
 	determinant := m.Determinant()
+	if determinant.IsZero() {
+		return nil
+	}
+
 	if verboseOut {
 		fmt.Printf("Matrix determinant: %d\n", determinant.IntPart())
 	}
