@@ -4,23 +4,42 @@ import (
 	"NumberMethods/benchmark"
 	"NumberMethods/gauss"
 	"NumberMethods/matrix"
+	"NumberMethods/seidel"
 	_ "NumberMethods/seidel"
+	"NumberMethods/utils"
 	"fmt"
-	"log"
 )
 
 func main() {
 	//runBenchmark()
 
-	system := gauss.NewSystem(matrix.NewMatrix(4, 3, [][]float64{
-		{5.4, -2.3, 3.4, -3.5},
-		{4.2, 1.7, -2.3, 2.7},
-		{3.4, 2.4, 7.4, 1.9},
+	gauss_system := gauss.NewSystem(matrix.NewMatrix(4, 3, [][]float64{
+		{1.06, -0.28, 0.84, 0.57},
+		{0.43, 0.62, -0.35, 0.66},
+		{0.37, -0.75, -0.64, -0.38},
 	}))
 
-	sol := system.Solve()
-	log.Println(sol)
-	log.Println(system.CheckSolution(sol))
+	gauss_sol := gauss_system.Solve()
+	utils.PrintDecimalArray(gauss_sol)
+
+	equals, accuracy := gauss_system.CheckSolution(gauss_sol)
+	fmt.Printf("Solution is correct: %v\n", equals)
+	utils.PrintDecimalArray(accuracy)
+	fmt.Println()
+
+	system := seidel.NewSystem(matrix.NewMatrix(4, 3, [][]float64{
+		{1.06, -0.28, 0.84, 0.57},
+		{0.43, 0.62, -0.35, 0.66},
+		{0.37, -0.75, -0.64, -0.38},
+	}), 0.001, 0.001)
+
+	sol, count := system.Solve()
+	fmt.Printf("Iterations: %d\n", count)
+	utils.PrintDecimalArray(sol)
+
+	equals, accuracy = gauss_system.CheckSolution(gauss_sol)
+	fmt.Printf("Solution is correct: %v\n", equals)
+	utils.PrintDecimalArray(accuracy)
 }
 
 func runBenchmark() {

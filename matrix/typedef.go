@@ -31,6 +31,22 @@ func (m *Matrix) Height() int {
 	return m.height
 }
 
+func (m *Matrix) Copy() *Matrix {
+	data := make([][]decimal.Decimal, m.height)
+
+	for r := 0; r < m.height; r++ {
+		row := make([]decimal.Decimal, m.width)
+
+		for c, value := range m.data[r] {
+			row[c] = value
+		}
+
+		data[r] = row
+	}
+
+	return &Matrix{data, m.width, m.height, Cache{}}
+}
+
 type Cache struct {
 	determinant *decimal.Decimal
 }

@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+	"github.com/shopspring/decimal"
 	"os"
 	"os/exec"
 	"runtime"
@@ -29,4 +31,11 @@ func ClearConsole() {
 	} else {
 		panic("Your platform is unsupported! I can't clear terminal screen :(")
 	}
+}
+
+func PrintDecimalArray(array []decimal.Decimal) {
+	for _, v := range array {
+		fmt.Printf("%s ", v.StringFixed(3))
+	}
+	fmt.Println()
 }

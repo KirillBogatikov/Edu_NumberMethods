@@ -3,16 +3,21 @@ package seidel
 import (
 	"NumberMethods/equation"
 	"NumberMethods/matrix"
-	"fmt"
 	"github.com/shopspring/decimal"
 )
 
+const (
+	MaxIterations = 10_000
+)
+
 type System struct {
+	CompareAccuracy decimal.Decimal
 	*equation.System
 }
 
-func NewSystem(m *matrix.Matrix, a float64) *System {
+func NewSystem(m *matrix.Matrix, a, b float64) *System {
 	return &System{
+		CompareAccuracy: decimal.NewFromFloat(b),
 		System: &equation.System{
 			Matrix:         m,
 			TargetAccuracy: decimal.NewFromFloat(a),
@@ -20,38 +25,52 @@ func NewSystem(m *matrix.Matrix, a float64) *System {
 	}
 }
 
-func (e *System) Solve() []decimal.Decimal {
-	previousX := make([]decimal.Decimal, e.Height())
-	currentX := make([]decimal.Decimal, e.Height())
+func (e *System) Solve() ([]decimal.Decimal, int) {
+	unknownWidth := e.Width() - 1
+
+	previous := make([]decimal.Decimal, e.Height())
+
+	freeValues := make([]decimal.Decimal, e.Height())
 	for i := 0; i < e.Height(); i++ {
-		currentX[i] = e.Get(i, e.Width()-1)
+		freeValues[i] = e.Get(i, unknownWidth)
 	}
 
 	i := 0
-	for i = 0; i < 1_000; i++ {
-		c := 0
+	for i = 0; i < MaxIterations; i++ {
+		for r := 0; r < e.Height(); r++ {
+			k := e.Get(r, unknownWidth)
+			x := k
 
-		for j, x := range currentX {
-			result := x
+			for c := 0; c < unknownWidth; c++ {
+				if r == c {
+					continue
+				}
 
-			for k := 0; k < e.Width(); k++ {
-				result = result.Mul(e.Get(j, k))
+				negativeValue := e.Get(r, c).Mul(decimal.NewFromInt(-1))
+				x = x.Add(negativeValue.Mul(freeValues[c]))
 			}
 
-			currentX[j] = result
-			if result.Equals(previousX[j]) {
-				c++
-			} else {
-				previousX[j] = result
-			}
+			freeValues[r] = x
 		}
 
-		if c == e.Height() {
+		if e.compare(previous, freeValues) {
 			break
+		}
+
+		for i, _ := range previous {
+			previous[i] = freeValues[i]
 		}
 	}
 
-	fmt.Println(i)
+	return freeValues, i
+}
 
-	return currentX
+func (s *System) compare(a []decimal.Decimal, b []decimal.Decimal) bool {
+	for i, v := range a {
+		if b[i].Sub(v).Abs().GreaterThan(s.CompareAccuracy) {
+			return false
+		}
+	}
+
+	return true
 }

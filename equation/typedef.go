@@ -33,8 +33,8 @@ type System struct {
 	TargetAccuracy decimal.Decimal
 }
 
-func NewSystem(m *matrix.Matrix) *System {
-	return &System{m, decimal.Zero}
+func NewSystem(m *matrix.Matrix, a decimal.Decimal) *System {
+	return &System{m, a}
 }
 
 func (s *System) CheckSolution(sol []decimal.Decimal) (bool, []decimal.Decimal) {
@@ -49,13 +49,12 @@ func (s *System) CheckSolution(sol []decimal.Decimal) (bool, []decimal.Decimal) 
 		var result decimal.Decimal
 
 		for c := 0; c < s.Width()-1; c++ {
-			result.Add(s.Get(r, c).Mul(sol[c]))
+			result = result.Add(s.Get(r, c).Mul(sol[c]))
 		}
 
-		accuracy[r] = result.Sub(s.Get(r, s.Width()-1))
-		a := accuracy[r]
+		accuracy[r] = result.Abs().Sub(s.Get(r, s.Width()-1).Abs()).Abs()
 
-		if ok && a.GreaterThan(s.TargetAccuracy) {
+		if ok && accuracy[r].GreaterThan(s.TargetAccuracy) {
 			ok = false
 		}
 	}

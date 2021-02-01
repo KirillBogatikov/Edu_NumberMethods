@@ -11,12 +11,7 @@ type System struct {
 }
 
 func NewSystem(m *matrix.Matrix) *System {
-	return &System{
-		System: &equation.System{
-			Matrix:         m,
-			TargetAccuracy: decimal.Zero,
-		},
-	}
+	return &System{equation.NewSystem(m, decimal.NewFromFloat(0.0000001))}
 }
 
 func (e *System) Solve() []decimal.Decimal {
