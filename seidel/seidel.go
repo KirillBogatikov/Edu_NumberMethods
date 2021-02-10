@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	MaxIterations = 10_000
+	MaxIterations = 100
 )
 
 type System struct {
@@ -53,7 +53,7 @@ func (e *System) Solve() ([]decimal.Decimal, int) {
 			freeValues[r] = x
 		}
 
-		if e.compare(previous, freeValues) {
+		if e.equals(previous, freeValues) {
 			break
 		}
 
@@ -65,7 +65,7 @@ func (e *System) Solve() ([]decimal.Decimal, int) {
 	return freeValues, i
 }
 
-func (s *System) compare(a []decimal.Decimal, b []decimal.Decimal) bool {
+func (s *System) equals(a []decimal.Decimal, b []decimal.Decimal) bool {
 	for i, v := range a {
 		if b[i].Sub(v).Abs().GreaterThan(s.CompareAccuracy) {
 			return false
