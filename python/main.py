@@ -1,3 +1,4 @@
+from equation import Member, VariableMember, Equation
 from gauss import *
 from matrices import Matrix
 from seidel.basic import prepare, solve
@@ -42,5 +43,11 @@ def seidel_main():
         print(calc_equation(e[0], s))
 
 
+def equation_test():
+    e = Equation([VariableMember(5, 2, "x1"), VariableMember(3, 3, "x2"), Member(5)])
+    r = e.get([VariableMember(1, name="x1"), VariableMember(2, name="x2")])
+    print(r)
+
+
 if __name__ == '__main__':
-    matrix_main()
+    equation_test()
